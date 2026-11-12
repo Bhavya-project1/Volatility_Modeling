@@ -1,34 +1,69 @@
-# Financial Volatility Modelling
+# ARCH, GARCH and EWMA Volatility Forecasting
 
-A quantitative-finance notebook exploring the modelling of time-varying volatility in financial return data.
+A Python notebook comparing three approaches to modelling and forecasting the volatility of **JPMorgan Chase (JPM)** daily returns:
 
-Financial returns often exhibit volatility clustering, where periods of elevated variability tend to be followed by further elevated variability. This project provides a computational setting for examining volatility dynamics using the specifications implemented in the notebook.
+- ARCH(1)
+- GARCH(1,1)
+- Exponentially Weighted Moving Average (EWMA)
+
+The notebook estimates conditional volatility from historical returns and examines short-horizon forecasts against a realised-volatility observation.
+
+## Data and Setup
+
+- Instrument: JPM
+- Main estimation window: 2022-01-01 to 2025-01-01
+- Return convention: daily percentage change for ARCH/GARCH; daily decimal returns for the EWMA section
+- EWMA decay parameter: λ = 0.94
+- ARCH/GARCH forecast horizon: five trading days
+
+The notebook also contains an earlier JPM price-history download beginning in 2015 for inspection.
+
+## Methodology
+
+### ARCH(1)
+
+Models conditional variance as a function of the previous period's squared innovation.
+
+### GARCH(1,1)
+
+Adds a lagged conditional-variance term, allowing volatility persistence to be represented.
+
+### EWMA
+
+Updates variance recursively using a decay parameter, assigning greater weight to recent squared returns.
+
+## Cached Example Output
+
+The executed notebook contains the following historical comparison for the five-day volatility forecasts at the end of the 2024 estimation sample:
+
+| Model | Mean forecast volatility | Realised volatility |
+|---|---:|---:|
+| ARCH(1) | 1.5563% | 1.6919% |
+| GARCH(1,1) | 1.6210% | 1.6919% |
+
+These are cached notebook outputs, not live forecasts. They should be interpreted cautiously: the exact realised-volatility calculation and forecast aggregation convention should be checked before treating the values as a formal accuracy comparison. The EWMA section is implemented separately in the notebook.
 
 ## Repository Contents
 
-- `Volatility_Modeling.ipynb` — primary analysis notebook.
-
-## Topics
-
-Consult the notebook for the exact model specifications, data, assumptions, estimation procedure, and diagnostics. The broader modelling context includes conditional heteroskedasticity, volatility clustering, conditional variance estimation, residual diagnostics, and volatility forecasting.
+- Volatility_Modeling.ipynb — model estimation, forecasting, and comparison.
 
 ## Technology
 
-Python · Jupyter Notebook · NumPy · pandas · Matplotlib · statistical modelling libraries used in the notebook
+Python · NumPy · pandas · yfinance · arch · Jupyter Notebook
 
 ## Run
 
-```bash
-pip install numpy pandas matplotlib scipy statsmodels arch jupyter
+~~~bash
+pip install -r requirements.txt
 jupyter notebook
-```
+~~~
 
-Open `Volatility_Modeling.ipynb` and execute the analysis from top to bottom. Install any additional dependency identified by the notebook if required.
+Open the notebook and execute the cells in sequence. Yahoo Finance data is downloaded at runtime.
 
-## Research Considerations
+## Validation Priorities
 
-Assess volatility models using residual diagnostics and out-of-sample forecast evaluation, not only in-sample fit. Forecasts are sensitive to asset, return frequency, sample period, distributional assumptions, and market regime.
+A research-grade extension should evaluate rolling one-step-ahead forecasts, compare against realised variance using a consistent horizon, use QLIKE and MSE where appropriate, examine standardised residuals and squared residuals, and report forecast performance over multiple market regimes.
 
 ## Disclaimer
 
-For research and educational purposes only. Model outputs are not investment advice or guarantees of future risk.
+Educational volatility-modelling exercise only. Forecasts are model-dependent and are not investment advice or guarantees of future risk.
