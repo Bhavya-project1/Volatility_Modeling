@@ -64,6 +64,12 @@ Open the notebook and execute the cells in sequence. Yahoo Finance data is downl
 
 A research-grade extension should evaluate rolling one-step-ahead forecasts, compare against realised variance using a consistent horizon, use QLIKE and MSE where appropriate, examine standardised residuals and squared residuals, and report forecast performance over multiple market regimes.
 
+## Visual Result
+
+The chart below reproduces the cached ARCH(1) and GARCH(1,1) forecast comparison recorded in the notebook. Values are daily volatility percentages and are not annualised.
+
+![JPM volatility forecast comparison](results/figures/jpm-volatility-forecast-comparison.svg)
+
 ## Disclaimer
 
 Educational volatility-modelling exercise only. Forecasts are model-dependent and are not investment advice or guarantees of future risk.
